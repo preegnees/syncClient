@@ -1,0 +1,29 @@
+{
+  "ip": "192.168.0.102",
+  "port": "8080",
+  "network_is_local": "yes",
+  "password_server": "qwerty",
+  "root_directory": "C:\\Users\\79174\\Desktop\\testFolder",
+  "my_name": "win",
+  "codeword": "win",
+  "timeout_file_searcher_in_milliseconds": "500",
+  "clipboard":
+  [
+
+  ],
+  "friends":
+  [
+    {
+      "pairName": "win",
+      "password": "1234"
+    },
+    {
+      "pairName": "lin",
+      "password": "1234"
+    },
+    {
+      "pairName": "term",
+      "password": "1234"
+    }
+  ]
+}
