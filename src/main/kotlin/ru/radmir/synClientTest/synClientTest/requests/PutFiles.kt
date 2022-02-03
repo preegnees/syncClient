@@ -37,10 +37,10 @@ class PutFiles {
 
                 val pairName = file.path.split(root)[1].split(File.separator)[1]
                 val fileName = file.name
-                val relativePath = if (file.path.split(root + File.separator + myName)[1] == File.separator + fileName) {
+                val relativePath = if (file.path.split(root + File.separator + pairName)[1] == File.separator + fileName) {
                     Vars.otherDelimiterInPathOfFile
                 } else {
-                    file.path.split(root + File.separator + myName)[1]
+                    file.path.split(root + File.separator + pairName)[1]
                         .replace(File.separator, Vars.otherDelimiterInPathOfFile)
                         .replace(Vars.otherDelimiterInPathOfFile + fileName, "")
                 }
