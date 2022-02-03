@@ -138,31 +138,30 @@ class GiveFiles {
                 if (fileIsExists.lastModified() >= timeFile.toLong()) {
                     continue
                 } else {
-                    val file = File(filePath + Vars.otherDownloadingFile)
-                    file.createNewFile()
-                    file.writeBytes(Base64.getDecoder().decode(contentOfFile))
+                    fileIsExists.writeBytes(Base64.getDecoder().decode(contentOfFile))
 
-                    if (file.length().toString() == sizeFile) {
-                        if(fileIsExists.delete()){
-                            file.renameTo(File(filePath))
-                        }
-                    } else {
-                        file.renameTo(File(filePath + "ПОВРЕЖДЕН"))
-                    }
+//                    if (file.length().toString() == sizeFile) {
+//                        if(fileIsExists.delete()){
+//                            file.renameTo(File(filePath))
+//                        }
+//                    } else {
+//                        file.renameTo(File(filePath + "ПОВРЕЖДЕН"))
+//                    }
+                    continue
                 }
             }
             try {
 //                 создадим path
                 File(folderPath).mkdir()
-                val file = File(filePath + Vars.otherDownloadingFile)
+                val file = File(filePath)
                 file.createNewFile()
                 file.writeBytes(Base64.getDecoder().decode(contentOfFile))
 
-                if (file.length().toString() == sizeFile) {
-                    file.renameTo(File(filePath))
-                } else {
-                    file.renameTo(File(filePath + "ПОВРЕЖДЕН"))
-                }
+//                if (file.length().toString() == sizeFile) {
+//                    file.renameTo(File(filePath))
+//                } else {
+//                    file.renameTo(File(filePath + "ПОВРЕЖДЕН"))
+//                }
             } catch (e: Exception) {
                 println("${Vars.otherErrorsFileCreate}: $i. Err: $e")
             }
