@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import ru.radmir.synClientTest.synClientTest.database.swaydb.Swaydb
 import ru.radmir.synClientTest.synClientTest.encryption.Cryptographer
+import ru.radmir.synClientTest.synClientTest.hashcheck.DirectoryChecker
 import ru.radmir.synClientTest.synClientTest.init.Vars
 import ru.radmir.synClientTest.synClientTest.requests.json.*
 import java.io.File
@@ -22,6 +23,8 @@ class CheckUpdateFiles() {
     private lateinit var rootUpdateFiles: RootUpdateServerFiles
     @Autowired
     private lateinit var cryptographer: Cryptographer
+    @Autowired
+    private lateinit var directoryChecker: DirectoryChecker
 
     fun start() {
         val ip = storage.get(Vars.configIp)
@@ -55,6 +58,12 @@ class CheckUpdateFiles() {
             }
             if (Vars.netServerResponseNoUpdates in text) {
                 return
+            }
+            if (text == Vars.otherEmpty) {
+                // если произойдет удаление в папке, то нужно его поймать
+                directoryChecker.start(storage.get(Vars.configRootDirectory)!!)
+                storage.set(Vars.otherSchema, Vars.otherEmpty)
+                directoryChecker.start(storage.get(Vars.configRootDirectory)!!)
             } else {
                 rootUpdateFiles = creatorJsonUpdatedFiles.start(text)
                 checkingForFiles(rootUpdateFiles, myName)
@@ -123,7 +132,7 @@ class CheckUpdateFiles() {
                 }
             } else {
                 val file = File(filePath)
-                if (i.timeFile!!.toLong() > file.lastModified()) {
+                if (i.timeFile!!.toLong() >= file.lastModified()) {
                     neededFiles.add(i)
                 }
             }
