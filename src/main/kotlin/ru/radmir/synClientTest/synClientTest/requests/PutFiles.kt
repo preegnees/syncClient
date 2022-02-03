@@ -25,6 +25,10 @@ class PutFiles {
 
         val listForSend: ArrayList<ClientPut> = arrayListOf()
         for (i in updatedFiles) {
+            // есть ли тут запрещенный символ
+            if (Vars.otherInvalidSymbolMicrosoftTempFile in i[0]){
+                continue
+            }
             // существует ли файл ?
             val file = File(i[0])
             if (file.exists()) {

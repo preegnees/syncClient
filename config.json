@@ -15,15 +15,11 @@
   [
     {
       "pairName": "win",
-      "password": "1234"
+      "password": "1"
     },
     {
-      "pairName": "lin",
-      "password": "1234"
-    },
-    {
-      "pairName": "term",
-      "password": "1234"
+      "pairName": "win2",
+      "password": "2"
     }
   ]
 }
