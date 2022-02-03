@@ -47,6 +47,8 @@ class CheckUpdateFiles() {
             httpResponse = httpclient.execute(httpGet)
         } catch (e:Exception) {
             println(Vars.netErrorsInvalidIpAndPortSettingsOrTheServerIsDown)
+            directoryChecker.start(storage.get(Vars.configRootDirectory)!!)
+            storage.set(Vars.otherSchema, Vars.otherEmpty)
             storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
             return
         }
@@ -70,6 +72,8 @@ class CheckUpdateFiles() {
             }
         } else {
             println(Vars.netErrorsServerIsNotAvailable)
+            directoryChecker.start(storage.get(Vars.configRootDirectory)!!)
+            storage.set(Vars.otherSchema, Vars.otherEmpty)
             storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
         }
     }
@@ -142,6 +146,7 @@ class CheckUpdateFiles() {
                 continue
             }
         }
+
         // сохранение в storage
         var temp = Vars.otherEmpty
         for (i in neededFiles) {
