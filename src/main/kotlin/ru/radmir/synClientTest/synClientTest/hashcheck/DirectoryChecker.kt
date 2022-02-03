@@ -120,7 +120,7 @@ class DirectoryChecker {
                 }
             }
             for (i in oldSchema) {
-                if (i !in newSchema) {
+                if (i[0] !in newSchema) {
                     deletedFiles.add(i)
                 }
             }

@@ -154,7 +154,7 @@ class GiveFiles {
             try {
 //                 создадим path
                 File(folderPath).mkdir()
-                val file = File(filePath)
+                val file = File(filePath + Vars.otherDownloadingFile)
                 file.createNewFile()
                 file.writeBytes(Base64.getDecoder().decode(contentOfFile))
 
