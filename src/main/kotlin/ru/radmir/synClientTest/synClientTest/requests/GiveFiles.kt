@@ -137,9 +137,9 @@ class GiveFiles {
             if (fileIsExists.exists()) {
 
                 if (fileIsExists.lastModified() >= timeFile.toLong()) {
-                    fileIsExists.writeBytes(Base64.getDecoder().decode(contentOfFile))
                     continue
                 } else {
+                    fileIsExists.writeBytes(Base64.getDecoder().decode(contentOfFile))
                     continue
                 }
             }

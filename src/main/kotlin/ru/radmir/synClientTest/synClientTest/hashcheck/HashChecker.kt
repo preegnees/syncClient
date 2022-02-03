@@ -18,6 +18,7 @@ class HashChecker() {
 
     fun start(root: String){
         val isNewHash: Boolean = if (storage.get(Vars.newErrorsDoNotSend).toBoolean()) {
+            hash(root)
             true
         } else {
             hash(root)

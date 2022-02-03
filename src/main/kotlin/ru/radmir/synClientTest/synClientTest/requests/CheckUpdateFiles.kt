@@ -118,24 +118,28 @@ class CheckUpdateFiles() {
             }
             val deletedFiles = deletedFile.readText(Charsets.UTF_8)
             if (filePath !in deletedFiles) {
-                val friends = storage.get(Vars.configFriends)!!.split(Vars.otherDelimiterBetweenNodes).toMutableList()
-                friends.removeAt(friends.lastIndex)
+                if (File(filePath).exists()) {
+                    val file = File(filePath)
+                    val lastModified = file.lastModified()
+                    if (i.timeFile!!.toLong() > lastModified) { // было >=
+                        neededFiles.add(i)
+                    }
+                } else {
+                    val friends = storage.get(Vars.configFriends)!!.split(Vars.otherDelimiterBetweenNodes).toMutableList()
+                    friends.removeAt(friends.lastIndex)
 
-                var counter = 0
-                for (i in friends) {
-                    if (i.split(Vars.otherDelimiterBetweenComponentsOfNode)[0] in nameDir){
-                        counter++
+                    var counter = 0
+                    for (i in friends) {
+                        if (i.split(Vars.otherDelimiterBetweenComponentsOfNode)[0] in nameDir){
+                            counter++
+                        }
+                    }
+                    if (i.nameDir!!.replace(myName, Vars.otherEmpty) == Vars.otherUnderscore || counter > 0) {
+                        neededFiles.add(i)
                     }
                 }
-                if (i.nameDir!!.replace(myName, Vars.otherEmpty) == Vars.otherUnderscore || counter > 0) {
-                    neededFiles.add(i)
-                }
             } else {
-                val file = File(filePath)
-                val lModif = file.lastModified()
-                if (i.timeFile!!.toLong() >= lModif) {
-                    neededFiles.add(i)
-                }
+                continue
             }
         }
         // сохранение в storage

@@ -116,7 +116,9 @@ class DirectoryChecker {
             }
             for (i in newSchema) {
                 if (i !in oldSchema) {
-                    updatedFiles.add(i)
+                    if (i !in updatedFiles) {
+                        updatedFiles.add(i)
+                    }
                 }
             }
             val tempOldSchemaWithoutSize = mutableListOf<List<String>>()
