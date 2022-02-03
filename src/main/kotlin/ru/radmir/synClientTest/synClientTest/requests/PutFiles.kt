@@ -44,39 +44,24 @@ class PutFiles {
                         .replace(File.separator, Vars.otherDelimiterInPathOfFile)
                         .replace(Vars.otherDelimiterInPathOfFile + fileName, "")
                 }
-
-                val contentOfFile = Base64.getEncoder().encodeToString(file.inputStream().readBytes())
                 val sizeFile = file.length().toString()
+                println(sizeFile)
+                val contentOfFile = Base64.getEncoder().encodeToString(file.inputStream().readBytes())
                 val timeFile = file.lastModified().toString()
                 listForSend.add(
                     ClientPut(
-                    name = myName,
-                    pairName = pairName,
-                    fileName = "$relativePath${Vars.otherDelimiterBetweenNodes}$fileName",
-                    sizeFile = sizeFile,
-                    timeFile = timeFile,
-                    contentOfFile = contentOfFile)
+                    name = cryptographer.encryptString(myName, Vars.cryptoWhoServer),
+                    pairName = cryptographer.encryptString(pairName, Vars.cryptoWhoServer),
+                    fileName = cryptographer.encryptString("$relativePath${Vars.otherDelimiterBetweenNodes}$fileName", Vars.cryptoWhoServer),
+                    sizeFile = cryptographer.encryptString(sizeFile, Vars.cryptoWhoServer),
+                    timeFile = cryptographer.encryptString(timeFile, Vars.cryptoWhoServer),
+                    contentOfFile = cryptographer.encryptFile(Base64.getDecoder().decode(contentOfFile),
+                        Vars.cryptoWhoClient, pairName))
                 )
+                val json = CreatorJsonPutFiles().start(RootPutFiles(listForSend))
+                sendJson(json, myName)
             }
         }
-        //  start encrypt
-        val tempRootPutFiles = ArrayList<ClientPut>()
-        for (i in listForSend) {
-            tempRootPutFiles.add(
-                ClientPut(
-                    name = cryptographer.encryptString(i.name!!, Vars.cryptoWhoServer),
-                    pairName = cryptographer.encryptString(i.pairName!!, Vars.cryptoWhoServer),
-                    fileName = cryptographer.encryptString(i.fileName!!, Vars.cryptoWhoServer),
-                    sizeFile = cryptographer.encryptString(i.sizeFile!!, Vars.cryptoWhoServer),
-                    timeFile = cryptographer.encryptString(i.timeFile!!, Vars.cryptoWhoServer),
-                    contentOfFile = cryptographer.encryptFile(Base64.getDecoder().decode(i.contentOfFile!!),
-                        Vars.cryptoWhoClient, i.pairName!!)
-                )
-            )
-        }
-        //  end encrypt
-        val json = CreatorJsonPutFiles().start(RootPutFiles(tempRootPutFiles))
-        sendJson(json, myName)
     }
 
     private fun sendJson(json: String, myName: String) {
