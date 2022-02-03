@@ -139,7 +139,13 @@ class GiveFiles {
                 if (fileIsExists.lastModified() >= timeFile.toLong()) {
                     continue
                 } else {
-                    fileIsExists.writeBytes(Base64.getDecoder().decode(contentOfFile))
+                    try {
+                        fileIsExists.writeBytes(Base64.getDecoder().decode(contentOfFile))
+                    } catch (e: Exception) {
+                        // тут может быть ошибка, если закинуть большой файл
+                        // и начать его открыть до завершения загрзки
+                        storage.set(Vars.otherUpdateFileDeleteFiles, Vars.otherBooleanTrue)
+                    }
                     continue
                 }
             }
@@ -147,8 +153,13 @@ class GiveFiles {
                 File(folderPath).mkdir()
                 val file = File(filePath)
                 file.createNewFile()
-                file.writeBytes(Base64.getDecoder().decode(contentOfFile))
-
+                try {
+                    file.writeBytes(Base64.getDecoder().decode(contentOfFile))
+                } catch (e: Exception) {
+                    // тут может быть ошибка, если закинуть большой файл
+                    // и начать его открыть до завершения загрзки
+                    storage.set(Vars.otherUpdateFileDeleteFiles, Vars.otherBooleanTrue)
+                }
             } catch (e: Exception) {
                 println("${Vars.otherErrorsFileCreate}: $i. Err: $e")
             }
