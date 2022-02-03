@@ -135,33 +135,20 @@ class GiveFiles {
             }
             val fileIsExists = File(filePath)
             if (fileIsExists.exists()) {
+
                 if (fileIsExists.lastModified() >= timeFile.toLong()) {
+                    fileIsExists.writeBytes(Base64.getDecoder().decode(contentOfFile))
                     continue
                 } else {
-                    fileIsExists.writeBytes(Base64.getDecoder().decode(contentOfFile))
-
-//                    if (file.length().toString() == sizeFile) {
-//                        if(fileIsExists.delete()){
-//                            file.renameTo(File(filePath))
-//                        }
-//                    } else {
-//                        file.renameTo(File(filePath + "ПОВРЕЖДЕН"))
-//                    }
                     continue
                 }
             }
             try {
-//                 создадим path
                 File(folderPath).mkdir()
                 val file = File(filePath)
                 file.createNewFile()
                 file.writeBytes(Base64.getDecoder().decode(contentOfFile))
 
-//                if (file.length().toString() == sizeFile) {
-//                    file.renameTo(File(filePath))
-//                } else {
-//                    file.renameTo(File(filePath + "ПОВРЕЖДЕН"))
-//                }
             } catch (e: Exception) {
                 println("${Vars.otherErrorsFileCreate}: $i. Err: $e")
             }

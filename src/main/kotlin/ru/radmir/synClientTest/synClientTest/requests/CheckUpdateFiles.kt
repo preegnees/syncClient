@@ -132,7 +132,8 @@ class CheckUpdateFiles() {
                 }
             } else {
                 val file = File(filePath)
-                if (i.timeFile!!.toLong() >= file.lastModified()) {
+                val lModif = file.lastModified()
+                if (i.timeFile!!.toLong() >= lModif) {
                     neededFiles.add(i)
                 }
             }
