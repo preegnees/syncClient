@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import ru.radmir.synClientTest.synClientTest.database.swaydb.Swaydb
 import ru.radmir.synClientTest.synClientTest.encryption.Cryptographer
-import ru.radmir.synClientTest.synClientTest.hashcheck.DirectoryChecker
 import ru.radmir.synClientTest.synClientTest.init.Vars
 import ru.radmir.synClientTest.synClientTest.requests.json.*
 import java.io.File
@@ -97,7 +96,6 @@ class PutFiles {
             httpResponse = httpClient.execute(httpPost)
         } catch (e: Exception) {
             println(Vars.netErrorsInvalidIpAndPortSettingsOrTheServerIsDown)
-            storage.set(Vars.otherSchema, Vars.otherEmpty)
             storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
             return
         }
@@ -108,10 +106,10 @@ class PutFiles {
             }
             if (Vars.netServerResponseOk !in text) {
                 println(Vars.netErrorsSomeProblemWithTheServer)
+                storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
             }
         } else {
             println(Vars.netErrorsServerIsNotAvailable)
-            storage.set(Vars.otherSchema, Vars.otherEmpty)
             storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
         }
     }

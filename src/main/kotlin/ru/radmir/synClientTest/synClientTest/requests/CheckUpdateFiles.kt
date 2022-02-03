@@ -47,8 +47,6 @@ class CheckUpdateFiles() {
             httpResponse = httpclient.execute(httpGet)
         } catch (e:Exception) {
             println(Vars.netErrorsInvalidIpAndPortSettingsOrTheServerIsDown)
-            directoryChecker.start(storage.get(Vars.configRootDirectory)!!)
-            storage.set(Vars.otherSchema, Vars.otherEmpty)
             storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
             return
         }
@@ -63,16 +61,13 @@ class CheckUpdateFiles() {
             }
             if (text == Vars.otherEmpty) {
                 // если произойдет удаление в папке, то нужно его поймать
-                directoryChecker.start(storage.get(Vars.configRootDirectory)!!)
-                storage.set(Vars.otherSchema, Vars.otherEmpty)
-                directoryChecker.start(storage.get(Vars.configRootDirectory)!!)
+                storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
             } else {
                 rootUpdateFiles = creatorJsonUpdatedFiles.start(text)
                 checkingForFiles(rootUpdateFiles, myName)
             }
         } else {
             println(Vars.netErrorsServerIsNotAvailable)
-            storage.set(Vars.otherSchema, Vars.otherEmpty)
             storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
         }
     }
