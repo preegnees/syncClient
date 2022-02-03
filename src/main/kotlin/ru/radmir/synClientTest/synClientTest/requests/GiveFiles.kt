@@ -150,7 +150,7 @@ class GiveFiles {
                 }
             }
             try {
-                File(folderPath).mkdir()
+                File(folderPath).mkdirs()
                 val file = File(filePath)
                 file.createNewFile()
                 try {
