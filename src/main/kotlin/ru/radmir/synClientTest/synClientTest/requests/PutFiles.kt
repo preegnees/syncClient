@@ -33,12 +33,18 @@ class PutFiles {
             val file = File(i[0])
             if (file.exists()) {
                 // separator тоже в константы
-                val root = storage.get(Vars.configRootDirectory)
-                val relativePath = file.path.split(root!!)[1]
-                    .replace(File.separator, Vars.otherDelimiterInPathOfFile)
-                    .replace(Vars.otherDelimiterInPathOfFile + file.name, "")
+                val root = storage.get(Vars.configRootDirectory)!!
+
                 val pairName = file.path.split(root)[1].split(File.separator)[1]
                 val fileName = file.name
+                val relativePath = if (file.path.split(root + File.separator + myName)[1] == File.separator + fileName) {
+                    Vars.otherDelimiterInPathOfFile
+                } else {
+                    file.path.split(root + File.separator + myName)[1]
+                        .replace(File.separator, Vars.otherDelimiterInPathOfFile)
+                        .replace(Vars.otherDelimiterInPathOfFile + fileName, "")
+                }
+
                 val contentOfFile = Base64.getEncoder().encodeToString(file.inputStream().readBytes())
                 val sizeFile = file.length().toString()
                 val timeFile = file.lastModified().toString()
@@ -90,6 +96,7 @@ class PutFiles {
             httpResponse = httpClient.execute(httpPost)
         } catch (e: Exception) {
             println(Vars.netErrorsInvalidIpAndPortSettingsOrTheServerIsDown)
+            storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
             return
         }
         if (httpResponse.statusLine.statusCode == 200) {
@@ -102,6 +109,7 @@ class PutFiles {
             }
         } else {
             println(Vars.netErrorsServerIsNotAvailable)
+            storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
         }
     }
 }

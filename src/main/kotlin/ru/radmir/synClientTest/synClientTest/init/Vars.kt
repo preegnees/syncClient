@@ -112,6 +112,7 @@ class Vars {
         const val netErrorsUsernameAlreadyTaken = "your username is already taken, \n" + "ваше имя пользовтеля уже занято"
         const val netErrorsServerIsNotAvailable = "server is not available, \n" + "сервер недоступен"
         const val netErrorsSomeProblemWithTheServer = "some problem with the server, \n" + "какая то проблема с сервером"
+        const val newErrorsDoNotSend = "newErrorsDoNotSend"
         //          crypto
         const val cryptoMethodCipher = "AES"
         const val cryptoWhoClient = "client"

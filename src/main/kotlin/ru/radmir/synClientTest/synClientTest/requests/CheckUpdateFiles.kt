@@ -44,6 +44,7 @@ class CheckUpdateFiles() {
             httpResponse = httpclient.execute(httpGet)
         } catch (e:Exception) {
             println(Vars.netErrorsInvalidIpAndPortSettingsOrTheServerIsDown)
+            storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
             return
         }
 
@@ -60,6 +61,7 @@ class CheckUpdateFiles() {
             }
         } else {
             println(Vars.netErrorsServerIsNotAvailable)
+            storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
         }
     }
 
@@ -83,15 +85,20 @@ class CheckUpdateFiles() {
             val pathName = convertFileName(i.nameFile)
             val name = pathName[1]
             val nameDir = i.nameDir!!
+            // тут наврнео не нужен сепаратор
             val root = storage.get(Vars.configRootDirectory) + File.separator // нужно ли тут File.separator ?
             val relativePath = pathName[0]
+            val pairName = if (nameDir.replace(myName!!, Vars.otherEmpty) != Vars.otherUnderscore)
+                nameDir.replace(myName, Vars.otherEmpty).replace(Vars.otherUnderscore, Vars.otherEmpty) else myName
             val filePathWithoutRelativePath = root +
-                    if (nameDir.replace(myName!!, Vars.otherEmpty) != Vars.otherUnderscore)
-                        nameDir.replace(myName, Vars.otherEmpty).replace(Vars.otherUnderscore, Vars.otherEmpty) else myName
-            val pairName = relativePath.split(File.separator)[1]
+                    pairName
+
             val filePath = filePathWithoutRelativePath +
-                     relativePath.split(pairName)[1] + File.separator +
-                    name
+                     if (relativePath != File.separator) {
+                         relativePath + File.separator + name
+                     } else {
+                         relativePath + name
+                     }
 
             // проверка в удаленных файлах
             val deletedFile = File(storage.get(Vars.configRootDirectory ) + File.separator + Vars.otherDeletedFiles)
@@ -101,7 +108,7 @@ class CheckUpdateFiles() {
                 deletedFile.writeText(Vars.otherDeletedFilesText)
             }
             val deletedFiles = deletedFile.readText(Charsets.UTF_8)
-            if (!File(filePath).exists() && filePath !in deletedFiles) {
+            if (filePath !in deletedFiles) {
                 val friends = storage.get(Vars.configFriends)!!.split(Vars.otherDelimiterBetweenNodes).toMutableList()
                 friends.removeAt(friends.lastIndex)
 

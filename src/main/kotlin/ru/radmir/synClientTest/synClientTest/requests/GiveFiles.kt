@@ -64,6 +64,7 @@ class GiveFiles {
                 httpResponse = httpClient.execute(httpPost)
             } catch (e: Exception) {
                 println(Vars.netErrorsInvalidIpAndPortSettingsOrTheServerIsDown)
+                storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
                 return
             }
 
@@ -81,6 +82,7 @@ class GiveFiles {
                 }
             } else {
                 println(Vars.netErrorsServerIsNotAvailable)
+                storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
             }
         }
     }
@@ -118,19 +120,12 @@ class GiveFiles {
                     }else {
                         pairName
                     } +
-                    if (relativePath.split(File.separator)[1] == myName) {
-                        if (relativePath.split(File.separator).size > 2) {
-                            relativePath.split(File.separator + myName)[1]
-                        } else {
-                            ""
-                        }
+                    if (relativePath == File.separator) {
+                        ""
                     } else {
-                        if (relativePath.split(File.separator).size > 2) {
-                            relativePath.split(File.separator + pairName)[1]
-                        } else {
-                            ""
-                        }
+                        relativePath
                     }
+
 
             val filePath = folderPath + File.separator + fileName
             // это можно положить в storage
@@ -159,7 +154,7 @@ class GiveFiles {
             try {
 //                 создадим path
                 File(folderPath).mkdir()
-                val file = File(filePath + Vars.otherDownloadingFile)
+                val file = File(filePath)
                 file.createNewFile()
                 file.writeBytes(Base64.getDecoder().decode(contentOfFile))
 

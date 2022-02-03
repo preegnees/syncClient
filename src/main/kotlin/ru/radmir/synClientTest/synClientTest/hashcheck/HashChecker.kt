@@ -17,7 +17,12 @@ class HashChecker() {
     private var newHash = Vars.otherHash
 
     fun start(root: String){
-        if (hash(root)) {
+        val isNewHash: Boolean = if (storage.get(Vars.newErrorsDoNotSend).toBoolean()) {
+            true
+        } else {
+            hash(root)
+        }
+        if (isNewHash) {
             directoryChecker.start(root)
         }
     }
@@ -44,8 +49,10 @@ class HashChecker() {
                     throw Exception(Vars.otherErrorsStrangeFileInRootDirectory)
                 }
                 if (i.isFile) {
-                    newHash += (abs(i.hashCode()).toString() +
-                            abs(i.lastModified().hashCode()).toString())
+                    if (Vars.otherInvalidSymbolMicrosoftTempFile !in i.name) {
+                        newHash += (abs(i.hashCode()).toString() +
+                                abs(i.lastModified().hashCode()).toString())
+                    }
                 }
             }
         }

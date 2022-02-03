@@ -29,16 +29,14 @@ class DetectorOfFiles() {
     }
     private fun detect(rootDir: String, timeout: Long) {
         createSchema(rootDir)
+        directoryChecker.start(rootDir)
         while (true) {
             // проверка файловой системы
             Thread.sleep(timeout)
-            // hashChecker.start(rootDir)
-            // отключил потому что при работе он мониторит изменения в папке,
-            // но измения могут быть так же и на сервере и мы о них не узнаем
-            directoryChecker.start(rootDir)
-            // get запрос, узнать обновления
+            hashChecker.start(rootDir)
+//             get запрос, узнать обновления
             checkUpdateFiles.start()
-            // забарать файлы
+//             забарать файлы
             checkFilesForGive.start()
         }
     }
