@@ -114,20 +114,17 @@ class DirectoryChecker {
                     }
                 }
             }
-            return when {
-                // тут могут быть ошибки, если мы очень быстро удалим и создаим файлы !!!
-                newSchema.size > oldSchema.size -> {
-                    mutableListOf(updatedFiles, deletedFiles)
-                }
-                newSchema.size < oldSchema.size -> {
-                    deletedFiles = oldSchema
-                    deletedFiles.removeAll(newSchema)
-                    mutableListOf(updatedFiles, deletedFiles)
-                }
-                else -> {
-                    mutableListOf(updatedFiles, deletedFiles)
+            for (i in newSchema) {
+                if (i !in oldSchema) {
+                    updatedFiles.add(i)
                 }
             }
+            for (i in oldSchema) {
+                if (i !in newSchema) {
+                    deletedFiles.add(i)
+                }
+            }
+            return mutableListOf(updatedFiles, deletedFiles)
         }
     }
 
