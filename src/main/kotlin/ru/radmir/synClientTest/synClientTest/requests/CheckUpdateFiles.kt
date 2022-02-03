@@ -72,7 +72,6 @@ class CheckUpdateFiles() {
             }
         } else {
             println(Vars.netErrorsServerIsNotAvailable)
-            directoryChecker.start(storage.get(Vars.configRootDirectory)!!)
             storage.set(Vars.otherSchema, Vars.otherEmpty)
             storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
         }

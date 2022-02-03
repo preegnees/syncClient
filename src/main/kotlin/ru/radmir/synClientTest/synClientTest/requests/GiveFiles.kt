@@ -67,7 +67,6 @@ class GiveFiles {
                 httpResponse = httpClient.execute(httpPost)
             } catch (e: Exception) {
                 println(Vars.netErrorsInvalidIpAndPortSettingsOrTheServerIsDown)
-                directoryChecker.start(storage.get(Vars.configRootDirectory)!!)
                 storage.set(Vars.otherSchema, Vars.otherEmpty)
                 storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
                 return

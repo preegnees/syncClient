@@ -20,8 +20,6 @@ class PutFiles {
     private lateinit var storage: Swaydb
     @Autowired
     private lateinit var cryptographer: Cryptographer
-    @Autowired
-    private lateinit var directoryChecker: DirectoryChecker
 
     fun start(updatedFiles: MutableList<List<String>>) {
         val myName = storage.get(Vars.configMyName)!!
@@ -99,7 +97,6 @@ class PutFiles {
             httpResponse = httpClient.execute(httpPost)
         } catch (e: Exception) {
             println(Vars.netErrorsInvalidIpAndPortSettingsOrTheServerIsDown)
-            directoryChecker.start(storage.get(Vars.configRootDirectory)!!)
             storage.set(Vars.otherSchema, Vars.otherEmpty)
             storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
             return
@@ -114,7 +111,6 @@ class PutFiles {
             }
         } else {
             println(Vars.netErrorsServerIsNotAvailable)
-            directoryChecker.start(storage.get(Vars.configRootDirectory)!!)
             storage.set(Vars.otherSchema, Vars.otherEmpty)
             storage.set(Vars.newErrorsDoNotSend, Vars.otherBooleanTrue)
         }
